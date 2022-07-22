@@ -1,153 +1,377 @@
-# Create a website for sales
-# Demo Basic Commands (Before Exploring File State)
-Create a new website named `index.html`.
+# Create a To-do app
 
-In VSCode, to create a new template html file, type
+# Basic Commands (Before Exploring File State)
+
+Create a new file named `README.txt` and add some texts. For instances:
+
 ```
-html:5
+To-do app
+
+Author: HCMUT
 ```
-Then press `Enter` to generate a new html template. 
 
-## Add navigation bar
-First access [Bootstrap5](https://getbootstrap.com/docs/5.0/getting-started/introduction/) to get template.
+We initialize our Git project using the command:
 
-Then add stylesheet for Bootstrap5 in `<head>` and `<body>`.
-
-Create new tag `<header>`. Search for `Navbar` in Bootstrap5 website, pick one template, then paste in the `<header>` tag.
+```
+git init
+```
 
 Then perform basic command. First add the file using:
+
 ```
-git add index.html
+git add README.txt
 ```
 
 Then commit the file with:
+
 ```
-git commit -m "header"
+git commit -m "Create README.txt"
 ```
 
 Then see the status of the file via:
+
 ```
 git status
 ```
 
 # Demo Basic Commands (After Exploring File State)
-## Add some heroes
-Search for `Heroes` then press `Enter` in Bootstrap5 website, pick one hero section by `F12` and copy the template to `<body>`.
 
-Then perform basic command. First add the file:
+## Add Usage
+
+Append section **Usage** into `README.txt`:
+
 ```
-git add index.html
+Usage:
+- Note everyday tasks
+- Track progress
+- Due day
 ```
 
-Then commit the file with:
+To commit our changes. First, we add the file:
+
 ```
-git commit -m "hero"
+git add README.txt
+git commit -m "Add section Usage"
 ```
 
-Then add logo for the heros and performing commit. But now we don't want to create new commit message, we can use:
+Running `git log` now would show our Git history as follow:
+
 ```
+commit b353032bda22c5f0dd9a81d978e1a9c532945133
+Author: TuanKietTran <kyletran101.work@gmail.com>
+Date:   Fri Jul 22 13:37:24 2022 +0700
+
+    add section Usage
+
+commit 49621bc977b46bdc98419593d2107c77a7f5f312
+Author: TuanKietTran <kyletran101.work@gmail.com>
+Date:   Fri Jul 22 13:30:46 2022 +0700
+
+    create README.txt
+```
+
+(The result on your machine may be different from this).
+Every commit is composed of 4 parts:
+
+- On the first line, `commit` show the ID of our commit in hexadecimal. We can later use it to identify the commit that we need.
+- The next line is about the **Author** who made the commit, including their email.
+- The third one is the date and time the commit was made.
+- The final line is the message of that commit.
+
+For better visualization, we can run the command:
+
+```
+git log --oneline --graph
+```
+
+`--graph` will display our commit history in a graph-style
+`--oneline` means compress our commit message into a single line
+`--all` is showing all branches
+
+The result will be easier to understand:
+
+```
+* b353032 add section Usage
+* 49621bc create README.txt
+```
+
+Since there is a typo in our last commit (~~`day`~~ `date`), we will fix it using amend
+
+```
+Usage:
+- Note everyday tasks
+- Track progress
+- Due date
+```
+
+Amend using the following code:
+
+```
+git add README.txt
 git commit --amend
 ```
 
+Continue on, we add some features that our To-do app will support:
+
+```
+Feature:
+- Feature 1
+- Feature 2
+- Feature 3
+...
+```
+
 ## .gitignore
-We want to add new logo for the heroes. But we don't want to include test image in our working directory.
 
-Create new file `.gitignore`, then use:
-```
-*.png
-```
-to ignore all png file when adding.
+During our app development, we may want to store some secrets / configurations that is local from our Git repo. Imagine we have a `.env` file as follow:
 
-## Add some features
-Search for `Features` then press `Enter` in Bootstrap5 website, pick one feature section by `F12` and copy the template to `<body>`.
-
-Then perform basic command. First add the file:
 ```
-git add index.html
+API_KEY=1234567890
+PORT=3000
 ```
 
-Then commit the file with:
+Maybe we have a logging folder, our directory structure would be follow
+
 ```
-git commit -m "feature"
+├── logs
+│   ├── log1.log
+│   ├── log2.log
+│   └── ...
+├── .env
+├── README.txt
 ```
 
-But now we find out that the feature section is not beauty as we though. But what do we do? `Ctrl + Z` or delete the part then commit again? We can undo our commit by
+To prevent Git from tracking these unwanted file, we can create a `.gitignore` file that describe our **ignore** files:
+
 ```
-git reset <commit_hash>
-```
-or we can reset a file by
-```
-git reset <commit_hash> <file_name>
+.env
+logs/
+
+# For mac user
+.DS_Store
 ```
 
-This reset the state of working directory to a particular commit but do not delete the update part.
+If we use a dedicated IDE / code editor, it will grey down these file to indicate that these are ignore files.
 
-To reset and delete the part, use `git reset --hard <commit_id>` or `git checkout <commit_hash> -- <file_name>`
+| ❗️ Caution |
+| ----------- |
 
-# Demo Branch
-Now we want to create product page but not doing with our current work.
+We may accidentally add one or more unwanted files to staging area. To remove these files, we use:
 
-Create a new website named `product.html`. Copy the navigation bar like `index.html`.
+```
+git rm --cached <file1> <file2>
+```
+
+# Branching
 
 ## Create new branch
-We now create new branch for product using:
+
+To allow development without affecting our project mainstream, we can create a new branch (aka branching) for our new feature.
+
 ```
-git branch product
+git branch feature1
 ```
 
-Switch to new branch with:
+Switch to newly created branch with:
+
 ```
-git checkout product
+git checkout feature1
 ```
 
-## Add album
-Search for `Album` then press `Enter` in Bootstrap5 website, pick one album section by `F12` and copy the template to `<body>`.
+These 2 commands are so common in Git that there is a shortcut for this:
 
-## Fast forward
-Now we switch to branch `master` and perform merge with
 ```
-git merge product
+git checkout -b feature1
 ```
 
-## Three-way merge
-Switch to branch product, add some heroes before album in `product.html` similar to add heroes above and commit.
-Then switch to master, add something new to `index.html` and commit.
-Then merge with product
+## Add feature1 -- Fast-Forward merge
+
+Create `feature1.txt` with the following content:
+
 ```
-git merge product
+The quick brown fox jumps over the lazy dog
 ```
 
-## Conflict
-Switch to branch product, add some heroes before album in `product.html` similar to add heroes above and commit.
-Switch to branch master, do the same.
-Then merge with product
+Then, to add and commit our changes, use:
+
 ```
-git merge product
+git add .
+git commit -m "Create feature1.txt"
 ```
 
-We see a conflict here because git don't now what version to choose. Pick one version with VSCode and then add the file and commit again to save the merge:
+Our boss want to change the color from **brown** to **red**. So, let's make it happen:
+
+First, modify `feature1.txt`:
+
 ```
-git add product.html
-git commit -m"conflict resolved"
+The quick red fox jumps over the lazy dog
 ```
 
-# Demo Stash
-Now we doing with `product.html`, we haven't finished yet to commit but we need to switch to main and do something. So we need to save the current state of our branch with stash:
+Then, add and commit our changes:
+
 ```
-git stash
+git add .
+git commit -m "Change fox color"
 ```
 
-To view all the stash we have:
+Feature1 is now complete, we might want to merge it back to our `main` branch.
+
+First, we need to checkout to the branch that we want to merge into, i.e: `main`
+
 ```
-git stash list
+git checkout main
 ```
 
-To get the stash we have many ways:
-1. Restore the work in the latest stash and remove it:
+Then run
+
+```
+git merge feature1
+```
+
+`feature1` will then be merge into main using fast-forward method.
+
+## Add feature2 -- Three-way merge
+
+To begin, create and checkout to our new branch:
+
+```
+git checkout -b feature2
+```
+
+Create `feature2.txt` as follow:
+
+```
+May the force be with you.
+```
+
+Then, commit our changes:
+
+```
+git add .
+git commit -m "Create feature2.txt"
+```
+
+Your boss now want to change from **dog** to **cat** :) Let's do it.
+
+Checkout to our main branch:
+
+```
+git checkout main
+```
+
+Then, modify `feature1.txt` as follow:
+
+```
+The quick red fox jumps over the lazy cat
+```
+
+Commit our change and we are done:
+
+```
+git add .
+git commit -m "From dog to cat"
+```
+
+`git log --all --oneline --graph` shows that our Git graph will be diverged into 2 branches: `main` and `feature2`
+
+`merge` command now would be a **three-way merge** instead of a **fast-forward**.
+
+```
+git merge feature2 -m "Add feature2"
+```
+
+A new commit is created with parents of both `master` & `feature2`
+
+## Add feature3 - Stash & Conflict
+
+To create another feature, i.e, `feature3`, create and checkout to this new branch:
+
+```
+git checkout -b feature3
+```
+
+Create `feature3.txt` with the content:
+
+```
+To infinity, and beyond!!!
+```
+
+Because `README.txt` doesn't list this new feature, we need to include it as well:
+
+```
+- Features 1
+- Features 2
+- Features 3
+```
+
+We also want a new usage for this feature, so our **Usage** section would be
+
+```
+Usage:
+- ...
+- Embed files
+```
+
+But your changes aren't ready to be committed (testing, reviewing, ...). At the mean time, your boss want you to add a new usage at the `master`. Checkout to `master` also brings all the changes that we have made before, which make it harder to add/commit. You could `stash` your changes before checkout.
+
+```
+git add .
+git stash -m "Create feature3"
+```
+
+Then checkout to `master` and handle your boss task:
+
+```
+Usage:
+- ...
+- Embed links
+```
+
+Add and commit our change to `master`
+
+```
+git add .
+git commit -m "Add new usage"
+```
+
+Return to `feature3` to finish our job:
+
+```
+git checkout feature3
+git stash apply
+```
+
+Add and commit our new feature:
+
+```
+git add .
+git commit -m "Create feature3.txt"
+```
+
+To remove our save stash, run:
+
 ```
 git stash pop
 ```
-2. Restore the work in the latest stash:
+
+`git log` now show us 2 branches.
+
+### Merge and resolve conflict
+
+After our development, we checkout back to `master` to perform merge:
+
 ```
-git stash apply <stash_code>
+git checkout master
+git merge feature3
+```
+
+A conflict will now occur because the last line of **Usage** section, `README.txt` is conflicted (both are add with a new line)
+
+In VSCode, we can choose which changes from a commit that we want to keep using the built-in link. In this case, we will choose `Accept Both Changes`.
+
+We have now successfully resolved a conflict. We can now re-commit our changes:
+
+```
+git add .
+git commit -m "Resolve conflict"
 ```
